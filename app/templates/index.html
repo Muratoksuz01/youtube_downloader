@@ -1,0 +1,99 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <style>
+        .a{
+            width: 60%;  
+        }   
+        img{
+            width: 10%;
+            height: 10%;
+        }
+    
+    </style>
+    <title>Document</title>
+</head>
+<body>
+    
+    <div class="container">
+        <form action="{% url 'index' %}" id="form1" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="form_type" value="form1">
+            <label for="link">url adresi:</label>
+            <input class="a" type="text" name="arama" id="link" >
+            <input type="submit" value="convert">
+        </form>
+
+
+      {% if videolar %}
+        <form action="{% url 'index' %}" id="form2" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="form_type" value="form2">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col"><label for="secili">tumunu sec</label>
+                            <input type="checkbox" name=""  id="secili"></th>  
+                        <th scope="col" > resim</th>
+                        <th scope="col">name</th>
+                        <th scope="col">
+                            kalite sec
+                        </th>
+                        <th scope="col">status</th>
+                    </tr>
+                </thead>
+                
+               
+                <tbody>
+                    {% for title,video in videolar.items %}
+                    <tr>
+                        <th scope="row">{{forloop.counter}}</th>
+                        
+                        <td><input checked type="checkbox" ></td>
+                        <td class="d-inline">
+                            <img  class="mt-2" src="{{video.resim_url}}" alt="">
+                        </td>
+                        <td>{{video.title}}</td>
+                        <td>
+                            
+                            <label for="kalite">Choose a kalite:</label>
+                            <select name="kaliteler" id="kalite">
+                                {% for kalite in video.kaliteler %}
+                                    <option value="{{kalite}}">{{kalite}}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td><input type="checkbox" name=""  checked disabled  id=""></td>
+                    </tr>
+                    
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <input type="submit" value="indir">
+    </form>
+    {% endif %}
+    </div>
+
+
+ <script>
+        // Tümünü Seç checkbox'ına tıklandığında
+        document.getElementById("secili").addEventListener("change", function() {
+            // Tüm checkbox'ları seçilen durumuna getir veya bırak
+            var checkboxes = document.querySelectorAll("table.table tbody input[type='checkbox']");
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = document.getElementById("secili").checked;
+            });
+        });
+    </script>
+
+
+</body>
+</html>
